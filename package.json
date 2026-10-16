@@ -1,6 +1,7 @@
 {
   "name": "@fungi.computer/issues",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "author": "Levi <levi@technomancy.dev>",
   "private": false,
   "description": "Pure validation and metadata projection for a complete issue tree",
   "type": "module",
