@@ -1,6 +1,6 @@
 {
   "name": "@fungi.computer/issues",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Levi <levi@technomancy.dev>",
   "private": false,
   "description": "Pure validation and metadata projection for a complete issue tree",
@@ -31,7 +31,8 @@
     "stranger": "tsx ../../tooling/repository/src/artifacts/cli.ts --repo-root ../.. .",
     "smoke": "node test/stranger/runtime.mjs",
     "prepack": "node scripts/prepare-package.mjs",
-    "docs": "node ../../apps/package-docs/scripts/build-sites.mjs --check issues"
+    "docs": "tsx ../../tooling/repository/src/docs/cli.ts check --root ../..",
+    "docs:write": "tsx ../../tooling/repository/src/docs/cli.ts write --root ../.."
   },
   "dependencies": {
     "@cfworker/json-schema": "4.1.1",

@@ -16,6 +16,7 @@ const FRONTIER_STATUSES = new Set<IssueStatus>([
   "ready-for-human",
 ]);
 
+/** Canonical triage state stored in ticket frontmatter. */
 export type IssueStatus =
   | "needs-triage"
   | "needs-info"
@@ -25,21 +26,34 @@ export type IssueStatus =
   | "resolved"
   | "wontfix";
 
+/** Ticket metadata accepted by the local issue frontmatter schema. */
 export type IssueFrontmatter = {
+  /** Stable effort-and-number identifier, independent of the ticket slug. */
   readonly id: string;
+  /** Ticket title, which must match the body's first Markdown heading. */
   readonly title: string;
+  /** Ticket kind selecting the required body sections. */
   readonly type:
     "bug" | "enhancement" | "task" | "research" | "prototype" | "decision";
+  /** Triage state; blocking is derived separately from dependency edges. */
   readonly status: IssueStatus;
+  /** Priority code, independent of triage state and blocking. */
   readonly priority: "p0" | "p1" | "p2" | "p3";
+  /** Creation date written as YYYY-MM-DD. */
   readonly created: string;
+  /** Claimed owner, or null while the ticket is unassigned. */
   readonly assignee: string | null;
+  /** Searchable area slugs from the governing Wiki's domain language. */
   readonly areas: readonly string[];
+  /** Stable ticket IDs that must be resolved or wontfix to settle blockers. */
   readonly blocked_by: readonly string[];
 };
 
+/** A path, content or dependency rule violation in the supplied issue tree. */
 export type IssueDiagnostic = {
+  /** Input file key identifying the ticket that needs correction. */
   readonly path: string;
+  /** Machine-readable rule violated by the ticket or its dependency graph. */
   readonly code:
     | "invalid-ticket-path"
     | "invalid-frontmatter"
@@ -50,13 +64,19 @@ export type IssueDiagnostic = {
     | "unknown-blocker"
     | "self-blocker"
     | "blocker-cycle";
+  /** Human-readable explanation of the failed rule. */
   readonly detail: string;
 };
 
+/** Ticket identity and dependency state used to assemble the ready frontier. */
 export type IssueSummary = {
+  /** Stable ticket identifier from its parsed frontmatter. */
   readonly id: string;
+  /** Ticket path relative to the supplied issue tree. */
   readonly path: string;
+  /** Current triage state, without a synthetic blocked state. */
   readonly status: IssueStatus;
+  /** Whether a declared blocker is absent or outside resolved and wontfix. */
   readonly blocked: boolean;
 };
 
@@ -66,17 +86,26 @@ export type IssueIndexRecord = Readonly<
     IssueFrontmatter,
     "id" | "title" | "status" | "priority" | "assignee" | "areas" | "blocked_by"
   > & {
+    /** Ticket path relative to the supplied issue tree. */
     path: string;
+    /** Whether any declared blocker remains unsettled. */
     blocked: boolean;
   }
 >;
 
+/** Validation result and index projections for one complete issue tree. */
 export type IssueTrackerReport = {
+  /** Version of this report representation, currently 1. */
   readonly schemaVersion: 1;
+  /** Pass only when the complete tree has no diagnostics. */
   readonly status: "pass" | "fail";
+  /** Parsed graph summaries, retained even when validation fails. */
   readonly issues: readonly IssueSummary[];
+  /** Validated index records; empty if any diagnostic exists. */
   readonly records: readonly IssueIndexRecord[];
+  /** Unassigned ready ticket IDs with all declared blockers settled. */
   readonly frontier: readonly string[];
+  /** Rule violations sorted by input path and diagnostic code. */
   readonly diagnostics: readonly IssueDiagnostic[];
 };
 
