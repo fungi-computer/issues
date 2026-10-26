@@ -28,6 +28,8 @@ export type IssueStatus =
 
 /** Ticket metadata accepted by the local issue frontmatter schema. */
 export type IssueFrontmatter = {
+  /** Final slice wires all of this effort's user surfaces. */
+  readonly reachable?: boolean;
   /** Stable effort-and-number identifier, independent of the ticket slug. */
   readonly id: string;
   /** Ticket title, which must match the body's first Markdown heading. */
@@ -84,7 +86,14 @@ export type IssueSummary = {
 export type IssueIndexRecord = Readonly<
   Pick<
     IssueFrontmatter,
-    "id" | "title" | "status" | "priority" | "assignee" | "areas" | "blocked_by"
+    | "id"
+    | "title"
+    | "status"
+    | "priority"
+    | "assignee"
+    | "areas"
+    | "blocked_by"
+    | "reachable"
   > & {
     /** Ticket path relative to the supplied issue tree. */
     path: string;
@@ -402,9 +411,17 @@ export function inspectIssueTree(
           const summary = issueById.get(record.frontmatter.id);
           if (summary === undefined)
             throw new Error("Validated issue record has no summary");
-          const { id, title, status, priority, assignee, areas, blocked_by } =
-            record.frontmatter;
-          return {
+          const {
+            id,
+            title,
+            status,
+            priority,
+            assignee,
+            areas,
+            blocked_by,
+            reachable,
+          } = record.frontmatter;
+          const index = {
             id,
             title,
             status,
@@ -415,6 +432,7 @@ export function inspectIssueTree(
             path: record.path,
             blocked: summary.blocked,
           } satisfies IssueIndexRecord;
+          return reachable === undefined ? index : { ...index, reachable };
         })
     : [];
   return {

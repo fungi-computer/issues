@@ -18,6 +18,7 @@ const issueFrontmatterSchema = {
     "blocked_by",
   ],
   properties: {
+    reachable: { type: "boolean" },
     id: {
       type: "string",
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*-[0-9]{2}[a-z]?$",
