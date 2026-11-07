@@ -35,6 +35,14 @@ Ticket metadata accepted by the local issue frontmatter schema.
 
 #### Properties
 
+##### reachable?
+
+```ts
+readonly optional reachable?: boolean;
+```
+
+Final slice wires all of this effort's user surfaces.
+
 ##### id
 
 ```ts
@@ -204,7 +212,14 @@ Whether a declared blocker is absent or outside resolved and wontfix.
 type IssueIndexRecord = Readonly<
   Pick<
     IssueFrontmatter,
-    "id" | "title" | "status" | "priority" | "assignee" | "areas" | "blocked_by"
+    | "id"
+    | "title"
+    | "status"
+    | "priority"
+    | "assignee"
+    | "areas"
+    | "blocked_by"
+    | "reachable"
   > &
     object
 >;
