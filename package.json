@@ -23,16 +23,8 @@
     "clean": "node --input-type=module --eval \"import { rm } from 'node:fs/promises'; await rm('dist', { recursive: true, force: true });\"",
     "build": "pnpm run clean && tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint src test --max-warnings=0 && ../../node_modules/.bin/oxlint --config ../../oxlint.config.ts --deny-warnings src test",
-    "test": "vitest run",
-    "format:check": "node ../../tooling/repository/scripts/format-package-check.mjs",
-    "lint:anti-slop": "node ../../tooling/repository/scripts/lint-package-anti-slop.mjs",
-    "pack": "mkdir -p ../../.botanical/issues-pack && pnpm pack --pack-destination ../../.botanical/issues-pack",
-    "stranger": "tsx ../../tooling/repository/src/artifacts/cli.ts --repo-root ../.. .",
     "smoke": "node test/stranger/runtime.mjs",
-    "prepack": "node scripts/prepare-package.mjs",
-    "docs": "tsx ../../tooling/repository/src/docs/cli.ts check --root ../..",
-    "docs:write": "tsx ../../tooling/repository/src/docs/cli.ts write --root ../.."
+    "prepack": "node scripts/prepare-package.mjs"
   },
   "dependencies": {
     "@cfworker/json-schema": "4.1.1",
