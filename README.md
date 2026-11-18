@@ -1,5 +1,50 @@
 # Issues (`@fungi.computer/issues`)
 
+Issues checks a folder of Markdown tickets in your repository and tells you
+which ones are unblocked.
+
+```mermaid
+flowchart LR
+  Folder[issues/ folder of Markdown] --> Issues[Issues package]
+  Issues -->|records| Tickets[Parsed tickets]
+  Issues -->|diagnostics| Problems[Broken links and states]
+  Tickets --> Ready[Unblocked tickets]
+```
+
+## Quick start
+
+Install it:
+
+```sh
+npm install @fungi.computer/issues
+```
+
+```ts
+import { inspectIssueTree } from "@fungi.computer/issues";
+
+const { records, diagnostics } = inspectIssueTree({});
+console.log({ records, diagnostics });
+```
+
+## Common tasks
+
+### Inspect a tree
+
+`inspectIssueTree` returns the records and any diagnostics. See
+[Inspect a tree](#inspect-a-tree).
+
+### Find what is ready to work on
+
+See [Core concepts](#core-concepts).
+
+### Run the checks
+
+See Examples and checks.
+
+## Reference
+
+### Overview
+
 Issues validates a Markdown issue tracker kept in a repository's `issues/`
 folder and works out which tickets are unblocked.
 
@@ -25,15 +70,6 @@ strict CSP), and remark parses Markdown headings. Heading comparisons retain
 literal inline Markdown; fenced code does not supply required sections. The
 blocker walk is iterative, so dependency depth does not consume the JavaScript
 call stack.
-
-## Quick start
-
-```ts
-import { inspectIssueTree } from "@fungi.computer/issues";
-
-const { records, diagnostics } = inspectIssueTree({});
-console.log({ records, diagnostics });
-```
 
 ## Core concepts
 
